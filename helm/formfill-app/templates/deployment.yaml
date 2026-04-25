@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: c01
-          image: 842746302447.dkr.ecr.ap-south-1.amazonaws.com/formfill-app:latest
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
             - containerPort: 8080
 
