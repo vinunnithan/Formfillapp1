@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: poc-service
+  namespace: frontend
+spec:
+  selector:
+    app: formfillapp
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+  type: ClusterIP

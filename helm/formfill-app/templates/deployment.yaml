@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: formfillapp
+  namespace: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: formfillapp
+  template:
+    metadata:
+      labels:
+        app: formfillapp
+    spec:
+      containers:
+        - name: c01
+          image: 842746302447.dkr.ecr.ap-south-1.amazonaws.com/formfill-app:latest
+          ports:
+            - containerPort: 8080
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
