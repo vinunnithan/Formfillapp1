@@ -19,7 +19,7 @@ pipeline {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/vinunnithan/Formfillapp1.git',
-                    credentialsId: 'github-cred'
+                    credentialsId: 'github-creds'
             }
         }
 
