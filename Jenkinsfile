@@ -8,7 +8,7 @@ pipeline {
     environment {
         AWS_REGION = "ap-south-1"
         ECR_REPO   = "842746302447.dkr.ecr.ap-south-1.amazonaws.com/formfill-app"
-        IMAGE_TAG  = "latest"
+        IMAGE_TAG  = "${BUILD_NUMBER}"
         CLUSTER    = "eks-cluster"
         NAMESPACE  = "frontend"
     }
