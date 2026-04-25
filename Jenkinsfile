@@ -23,9 +23,13 @@ pipeline {
             }
         }
 
-        stage('Build Maven') {
+        stage('Build Maven') { 
             steps {
-                sh 'mvn clean package -DskipTests'
+              sh '''
+              export PATH=/opt/maven/bin:$PATH
+              mvn -version
+              mvn clean package -DskipTests
+              '''
             }
         }
 
