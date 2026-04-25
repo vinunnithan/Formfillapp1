@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    options {
+        skipDefaultCheckout(true)
+    }
+
     environment {
         AWS_REGION = "ap-south-1"
         ECR_REPO   = "842746302447.dkr.ecr.ap-south-1.amazonaws.com/formfill-app"
@@ -13,8 +17,9 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/vinunnithan/FormFillApp.git',
-                credentialsId: 'github-creds'
+                git branch: 'main',
+                    url: 'https://github.com/vinunnithan/Formfillapp1.git',
+                    credentialsId: 'github-cred'
             }
         }
 
@@ -37,7 +42,7 @@ pipeline {
             steps {
                 sh '''
                 aws ecr get-login-password --region ${AWS_REGION} | \
-                docker login --username AWS --password-stdin ${ECR_REPO}
+                docker login --username AWS --password-stdin 842746302447.dkr.ecr.ap-south-1.amazonaws.com
                 '''
             }
         }
