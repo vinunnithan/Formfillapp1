@@ -14,7 +14,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 git branch: 'main',
-                url: 'https://github.com/vinunnithan/FormFillApp.git',
+                url: 'https://github.com/vinunnithan/Formfillapp1.git',
                 credentialsId: 'github-creds'
             }
         }
