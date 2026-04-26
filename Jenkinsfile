@@ -1,14 +1,10 @@
 pipeline {
     agent any
 
-    options {
-        skipDefaultCheckout(true)
-    }
-
     environment {
         AWS_REGION = "ap-south-1"
         ECR_REPO   = "842746302447.dkr.ecr.ap-south-1.amazonaws.com/formfill-app"
-        IMAGE_TAG  = "${BUILD_NUMBER}"
+        IMAGE_TAG  = "latest"
         CLUSTER    = "eks-cluster"
         NAMESPACE  = "frontend"
     }
@@ -18,18 +14,14 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/vinunnithan/Formfillapp1.git',
-                    credentialsId: 'github-creds'
+                url: 'https://github.com/vinunnithan/FormFillApp.git',
+                credentialsId: 'github-creds'
             }
         }
 
-        stage('Build Maven') { 
+        stage('Build Maven') {
             steps {
-              sh '''
-              export PATH=/opt/maven/bin:$PATH
-              mvn -version
-              mvn clean package -DskipTests
-              '''
+                sh 'mvn clean package -DskipTests'
             }
         }
 
@@ -42,11 +34,19 @@ pipeline {
             }
         }
 
+        stage('Trivy Image Scan') {
+            steps {
+                sh '''
+                trivy image --exit-code 1 --severity HIGH,CRITICAL formfill-app:${IMAGE_TAG}
+                '''
+            }
+        }
+
         stage('Login to ECR') {
             steps {
                 sh '''
                 aws ecr get-login-password --region ${AWS_REGION} | \
-                docker login --username AWS --password-stdin 842746302447.dkr.ecr.ap-south-1.amazonaws.com
+                docker login --username AWS --password-stdin ${ECR_REPO}
                 '''
             }
         }
