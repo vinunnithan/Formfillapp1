@@ -37,11 +37,16 @@ pipeline {
         stage('Trivy Image Scan') {
             steps {
                 sh '''
-                trivy image \
-                --skip-db-update \
-                --exit-code 1 \
-                --severity HIGH,CRITICAL \
-                formfill-app:${IMAGE_TAG}
+                export TRIVY_CACHE_DIR=/var/lib/jenkins/trivy-cache
+                export TMPDIR=/var/lib/jenkins/tmp
+		mkdir -p $TRIVY_CACHE_DIR
+		mkdir -p $TMPDIR
+		trivy image \
+		--cache-dir $TRIVY_CACHE_DIR \
+		--skip-db-update \
+		--exit-code 1 \
+		--severity HIGH,CRITICAL \
+		formfill-app:${IMAGE_TAG}
                 '''
             }
         }
