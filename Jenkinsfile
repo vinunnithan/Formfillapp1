@@ -37,7 +37,11 @@ pipeline {
         stage('Trivy Image Scan') {
             steps {
                 sh '''
-                trivy image --exit-code 1 --severity HIGH,CRITICAL formfill-app:${IMAGE_TAG}
+                trivy image \
+                --skip-db-update \
+                --exit-code 1 \
+                --severity HIGH,CRITICAL \
+                formfill-app:${IMAGE_TAG}
                 '''
             }
         }
