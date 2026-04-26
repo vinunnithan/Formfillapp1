@@ -43,7 +43,6 @@ pipeline {
 		mkdir -p $TMPDIR
 		trivy image \
 		--cache-dir $TRIVY_CACHE_DIR \
-		--skip-db-update \
 		--exit-code 1 \
 		--severity HIGH,CRITICAL \
 		formfill-app:${IMAGE_TAG}
