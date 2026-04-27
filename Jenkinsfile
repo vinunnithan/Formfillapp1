@@ -4,7 +4,7 @@ pipeline {
     environment {
         AWS_REGION = "ap-south-1"
         ECR_REPO   = "842746302447.dkr.ecr.ap-south-1.amazonaws.com/formfill-app"
-        IMAGE_TAG  = "latest"
+        IMAGE_TAG  = "${BUILD_NUMBER}"   // ✅ ONLY CHANGE
         CLUSTER    = "eks-cluster"
         NAMESPACE  = "frontend"
     }
@@ -39,13 +39,14 @@ pipeline {
                 sh '''
                 export TRIVY_CACHE_DIR=/var/lib/jenkins/trivy-cache
                 export TMPDIR=/var/lib/jenkins/tmp
-		mkdir -p $TRIVY_CACHE_DIR
-		mkdir -p $TMPDIR
-		trivy image \
-		--cache-dir $TRIVY_CACHE_DIR \
-		--exit-code 1 \
-		--severity HIGH,CRITICAL \
-		formfill-app:${IMAGE_TAG}
+                mkdir -p $TRIVY_CACHE_DIR
+                mkdir -p $TMPDIR
+
+                trivy image \
+                --cache-dir $TRIVY_CACHE_DIR \
+                --exit-code 1 \
+                --severity HIGH,CRITICAL \
+                formfill-app:${IMAGE_TAG}
                 '''
             }
         }
