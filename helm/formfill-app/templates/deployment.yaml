@@ -5,6 +5,12 @@ metadata:
   namespace: frontend
 spec:
   replicas: {{ .Values.replicaCount }}
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   selector:
     matchLabels:
       app: formfillapp
@@ -16,6 +22,7 @@ spec:
       containers:
         - name: c01
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
 
